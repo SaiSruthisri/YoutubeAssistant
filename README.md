@@ -18,7 +18,7 @@ This project was made possible thanks to the following open-source libraries and
 - [Streamlit](https://streamlit.io/)
 - [youtube-transcript-api](https://pypi.org/project/youtube-transcript-api/)
 - [deep-translator](https://pypi.org/project/deep-translator/)
-- [google-generativeai](https://pypi.org/project/google-generativeai/)
+- [google-generativeai](https://ai.google.dev/api/semantic-retrieval/question-answering#request-body)
 - [python-dotenv](https://pypi.org/project/python-dotenv/)
 
 ## Setup
