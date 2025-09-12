@@ -2,6 +2,14 @@
 
 A Streamlit web app to extract, summarize, and interact with YouTube video transcripts using Gemini AI. (Translation and Text-to-Voice features coming soon!)
 
+## Tech Stack
+
+- **Streamlit**: For building the interactive web frontend.
+- **youtube-transcript-api**: To fetch YouTube video transcripts programmatically.
+- **google-generativeai (Gemini Flash 2.0 model)**: For summarization and question answering on video content.
+- **deep-translator**: (Coming soon) For translating transcripts into multiple languages.
+- **python-dotenv**: For secure management of API keys and environment variables.
+
 ## Features
 
 - **Extract YouTube Transcripts:** Enter a YouTube URL and fetch the transcript (first available language).
@@ -10,16 +18,6 @@ A Streamlit web app to extract, summarize, and interact with YouTube video trans
 - **Interactive UI:** All features are accessible via a simple Streamlit interface.
 - **Translate Transcript:** _Coming soon!_
 - **Text to Voice:** _Coming soon !_
-
-## Special Thanks
-
-This project was made possible thanks to the following open-source libraries and their documentation:
-
-- [Streamlit](https://streamlit.io/)
-- [youtube-transcript-api](https://pypi.org/project/youtube-transcript-api/)
-- [deep-translator](https://pypi.org/project/deep-translator/)
-- [google-generativeai](https://pypi.org/project/google-generativeai/)
-- [python-dotenv](https://pypi.org/project/python-dotenv/)
 
 ## Setup
 
@@ -81,6 +79,16 @@ This project was made possible thanks to the following open-source libraries and
 - **Transcript not found:** Some videos may not have transcripts available.
 - **API errors:** Ensure your API key is valid and you have internet access.
 - **Text too long:** The app automatically splits long transcripts for summarization.
+
+## Special Thanks
+
+This project was made possible thanks to the following open-source libraries and their documentation:
+
+- [Streamlit](https://streamlit.io/)
+- [youtube-transcript-api](https://pypi.org/project/youtube-transcript-api/)
+- [deep-translator](https://pypi.org/project/deep-translator/)
+- [google-generativeai](https://pypi.org/project/google-generativeai/)
+- [python-dotenv](https://pypi.org/project/python-dotenv/)
 
 ## License
 
