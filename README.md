@@ -107,10 +107,8 @@ This project was made possible thanks to the following open-source libraries, do
 - [deep-translator](https://pypi.org/project/deep-translator/)
 - [google-generativeai](https://pypi.org/project/google-generativeai/)
 - [python-dotenv](https://pypi.org/project/python-dotenv/)
-- **Gemini API Rate Limiting:**
-  - Read about Gemini model rate limits and quotas here: https://ai.google.dev/gemini-api/docs/rate-limits
-- **Retry Strategies:**
-  - Best practices for handling API retries and backoff are based on: https://cloud.google.com/storage/docs/retry-strategy#python
+- **Gemini API Rate Limiting:** Read about Gemini model rate limits and quotas [here](https://ai.google.dev/gemini-api/docs/rate-limits)
+- **Retry Strategies:** Best practices for handling API retries and backoff are based on [Link](https://cloud.google.com/storage/docs/retry-strategy#python)
 
 ## License
 
