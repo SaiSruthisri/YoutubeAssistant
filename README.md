@@ -68,7 +68,7 @@ A Streamlit web app to extract, summarize, translate, and interact with YouTube 
 4. **Summarize the Video:**  
    Click "📝Summarize the video" for a bullet-point summary.
 
-5. **View Entire Transcript:**
+5. **View Entire Transcript:**   
    After loading, you can view the complete transcript in the video's original language from the sidebar.
 
 6. **Ask Questions:**  
