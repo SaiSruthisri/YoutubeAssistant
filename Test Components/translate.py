@@ -1,4 +1,4 @@
-# simple translation test code
+# simple translation test code (using deep_translator documentation)
 from deep_translator import GoogleTranslator
 
 text_to_translate = "పుస్తకము యొక్క ముఖ్య భాగములు ఏమిటి?"

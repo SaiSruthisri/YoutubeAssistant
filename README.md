@@ -50,7 +50,7 @@ A Streamlit web app to extract, summarize, translate, and interact with YouTube 
 
 4. **Run the app:**
    ```bash
-   streamlit run fr.py
+   streamlit run app.py
    ```
    - After running, open your browser and go to [http://localhost:8501](http://localhost:8501) to use the app live.
 
