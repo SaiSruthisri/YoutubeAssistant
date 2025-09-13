@@ -41,7 +41,7 @@ language_options = {
     "Chinese": "zh-CN"
 }
 
-lang_choice = st.selectbox("🌍" + GoogleTranslator(source='en', target='en').translate("Choose Language:"), list(language_options.keys()))
+lang_choice = st.selectbox(GoogleTranslator(source='en', target='en').translate("Choose Language:"), list(language_options.keys()))
 target_lang = language_options[lang_choice]
 
 def safe_generate(prompt,retries=3):
@@ -87,7 +87,7 @@ def gemini_translate(text, target_lang):
     return resp.text.strip()
 
 
-st.title(ui_translate("YouTube Assistant here", target_lang))
+st.title("🤖 " + ui_translate("YouTube Assistant", target_lang))
 youtube_url = st.text_input(ui_translate("Enter your Youtube URL:", target_lang))
 video_id=""
 pattern = r"(?:v=|\/)([0-9A-Za-z_-]{11})"
@@ -131,7 +131,7 @@ if st.button(ui_translate("Load Transcript", target_lang)):
             st.error(f"Error: {e}") 
 
 
-st.write("What would you like to do next?")
+st.write(ui_translate("What would you like to do next?", target_lang))
 col1, col2 = st.columns([1,1], gap="small") 
 with col1:
     summarize_clicked = st.button("📝 " + ui_translate("Summarize the video", target_lang), key="summarize_btn" , type = "secondary")
@@ -162,7 +162,11 @@ if transcript_clicked:
 
 
 
-user_question = st.text_input(ui_translate("Ask a question about the video:", target_lang))
+
+user_question = st.text_input(
+    ui_translate("Ask a question about the video:", target_lang),
+    placeholder=ui_translate("Type your question here...", target_lang)
+)
 
 if st.button(ui_translate("Ask", target_lang), type="primary"):
     if not user_question.strip():
