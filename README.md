@@ -68,14 +68,17 @@ A Streamlit web app to extract, summarize, translate, and interact with YouTube 
 4. **Summarize the Video:**  
    Click "📝Summarize the video" for a bullet-point summary.
 
-5. **Ask Questions:**  
+5. **View Entire Transcript:**
+   After loading, you can view the complete transcript in the video's original language from the sidebar.
+
+6. **Ask Questions:**  
    Type your question about the video and click "Ask" to get an AI-powered answer.
 
-6. **Translate Transcript, Summary, and Answers:**  
+7. **Translate Transcript, Summary, and Answers:**  
    - Summaries and answers are generated in English by Gemini, then translated to your chosen language using Gemini for high quality.
    - UI elements (headings, buttons, prompts) are translated instantly using deep-translator for a native experience.
 
-7. **Text to Voice:**  
+8. **Text to Voice:**  
    _Feature coming soon !_
 
 ## Supported Languages (for translation)
