@@ -1,10 +1,10 @@
+from config import MODEL, RPM, TPM, RPD, CHARS_PER_TOKEN
 from youtube_transcript_api import YouTubeTranscriptApi
 from deep_translator import GoogleTranslator
+from dotenv import load_dotenv
 import streamlit as st
 import google.genai as genai
-from dotenv import load_dotenv
-import os
-import re 
+import os, re, time, random
 
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
@@ -18,17 +18,7 @@ if "summary" not in st.session_state:
 if "transcript" not in st.session_state:
     st.session_state.transcript = ""
 
-st.title("YouTube Assistant here")
-# st.title("Enter Youtube URL")
-youtube_url = st.text_input("Enter your Youtube URL:")
-
-video_id=""
-pattern = r"(?:v=|\/)([0-9A-Za-z_-]{11})"
-video_ID = re.search(pattern, youtube_url)  # Extract video ID from URL
-if video_ID:
-    video_id = video_ID.group(1)
-
-target_lang = "en"
+# Language selection
 language_options = {
     "English": "en",
     "Hindi": "hi",
@@ -50,11 +40,66 @@ language_options = {
     "Japanese": "ja",
     "Chinese": "zh-CN"
 }
+
+lang_choice = st.selectbox("🌍" + GoogleTranslator(source='en', target='en').translate("Choose Language:"), list(language_options.keys()))
+target_lang = language_options[lang_choice]
+
+def safe_generate(prompt,retries=3):
+    retryable_errors = ("429", "408", "500", "502", "503", "504", "ResourceExhausted")
+    for attempt in range(retries):
+        try:
+            rate_limit_pause()
+            return client.models.generate_content(model=MODEL, contents=prompt)
+        except Exception as e:
+            if any(err in str(e) for err in retryable_errors):
+                wait = (2 ** attempt) + random.uniform(0, 1) 
+                time.sleep(wait)
+            else:
+                raise
+
+def chunk_text(full_text,max_tokens=TPM//RPM):
+    chunk_size = max_tokens*CHARS_PER_TOKEN
+    return [full_text[i:i+chunk_size] for i in range(0, len(full_text), chunk_size)]
+
+request_times = []
+def rate_limit_pause():
+    # time.sleep(60/RPM)
+    now = time.time()
+    while request_times and request_times[0] < now-60:
+        request_times.pop(0)
+    if len(request_times) >= RPM:
+        sleep_for = 60 - (now - request_times[0])
+        time.sleep(max(0, sleep_for)) 
+    request_times.append(time.time())       
+
+def ui_translate(text, target_lang):
+    if target_lang == "en":
+        return text
+    try:
+        return GoogleTranslator(source='en', target=target_lang).translate(text)
+    except Exception:
+        return text
+
+def gemini_translate(text, target_lang):
+    if target_lang == "en":
+        return text
+    resp = safe_generate(f"Translate the following text into {lang_choice} ({target_lang}):\n\n{text}")
+    return resp.text.strip()
+
+
+st.title(ui_translate("YouTube Assistant here", target_lang))
+youtube_url = st.text_input(ui_translate("Enter your Youtube URL:", target_lang))
+video_id=""
+pattern = r"(?:v=|\/)([0-9A-Za-z_-]{11})"
+video_ID = re.search(pattern, youtube_url)  # Extract 1st videoID
+if video_ID:
+    video_id = video_ID.group(1)
+
+
 ## Load and summarize transcript
-# master_summary = ""
-if st.button("Load Transcript"): 
+if st.button(ui_translate("Load Transcript", target_lang)):
     if video_id == "":
-       st.error("Please enter a valid YouTube video URL!")
+        st.error(ui_translate("Please enter a valid YouTube video URL!", target_lang))
     else:
         try:
             ytt_api = YouTubeTranscriptApi()
@@ -65,77 +110,68 @@ if st.button("Load Transcript"):
                 full_text += item.text  
             st.session_state.transcript = full_text      
 
-            # Chunk transcript
-            chunk_size = 3000    
-            chunks = [full_text[i:i+chunk_size] for i in range(0, len(full_text), chunk_size)]
-
+            chunks = chunk_text(full_text, max_tokens=TPM//RPM)
             summaries = []
             for chunk in chunks:
-                resp = client.models.generate_content(
-                    model="gemini-2.0-flash-001",   
-                    contents=f"Summarize this transcript chunk concisely:\n\n{chunk}"
+                resp = safe_generate(
+                    f"Summarize this transcript chunk concisely in English:\n\n{chunk}"
                 )
                 summaries.append(resp.text)
 
-            master_summary = " ".join(summaries)
+            master_summary_en = " ".join(summaries)
+            master_summary = gemini_translate(master_summary_en, target_lang)
             st.session_state.summary = master_summary
             st.session_state.chat = [
                 {"role": "user", "parts": [f"Here is the summary of the transcript:\n\n{master_summary}"]}
             ]
-            st.success("Transcript summarized! You can now ask questions below.")
+            st.success(ui_translate("Transcript summarized! You can now ask questions below.", target_lang))
 
         except Exception as e:
             st.error(f"Error: {e}") 
 
 
-if st.button("Summarize the video"):
+
+if st.button("📝" + ui_translate("Summarize the video", target_lang)):
     if not st.session_state.summary:
-        st.error("Please load transcript first!")
+        st.error(ui_translate("Please load transcript first!", target_lang))
     else:
-        resp = client.models.generate_content(
-            model="gemini-2.0-flash-001",
-            contents=f"Summarize the following transcript in nice bullet points , keep all important informative details in it:\n\n{st.session_state.transcript}"
+        resp = safe_generate(
+            f"Summarize the following transcript in nice bullet points in English. "
+            f"Keep all important informative details in it:\n\n{st.session_state.transcript}"
         )
-        final_summary = resp.text
+        final_summary_en = resp.text
+        final_summary = gemini_translate(final_summary_en, target_lang)
         st.session_state.summary = final_summary
-        st.markdown("### 📝 100-word Summary")
-        st.write(final_summary) 
+        st.title(ui_translate("📝 Short Summary of your Video", target_lang))
+        st.write(final_summary)
 
               
 
-user_question = st.text_input("Ask a question about the video:")
 
-if st.button("Ask", type="primary"):
+user_question = st.text_input(ui_translate("Ask a question about the video:", target_lang))
+
+
+if st.button(ui_translate("Ask", target_lang), type="primary"):
     if not user_question.strip():
-        st.error("Please enter a question!")
+        st.error(ui_translate("Please enter a question!", target_lang))
     elif not st.session_state.get("chat"):
-        st.error("Load the transcript first!")
+        st.error(ui_translate("Load the transcript first!", target_lang))
     else:
-        resp = client.models.generate_content(
-            model="gemini-2.0-flash-001",
-            contents=f"""
-            You are a helpful and friendly assistant. The user has provided a transcript summary of a YouTube video. 
-Your job is to answer their question in a clear, descriptive, and respectful way.  
+        resp = safe_generate(f"""
+        You are a helpful and friendly assistant & conversationalist. The user has provided a transcript summary of a YouTube video. 
+        Your job is to answer their question in English in a clear, descriptive, and respectful way yet very friendly manner.  
 
-Guidelines:
-- Be conversational and approachable, but keep a polite and slightly obedient tone.  
-- Do not start answers with “The video says…” or similar. Instead, directly explain the content.  
-- Give maximum useful information from the transcript relevant to the user’s question.  
-- Organize explanations with clarity (use short paragraphs or bullet points if needed).  
-- If examples, timestamps, or details are mentioned in the video, include them naturally in your answer.  
-- Always stay accurate and avoid adding outside assumptions.  
+        Guidelines:
+        - Be conversational and approachable, but keep a polite and slightly obedient tone.  
+        - Do not start answers with “The video says…” or similar. Instead, directly explain the content.  
+        - Give maximum useful information from the transcript relevant to the user’s question.  
+        - Organize explanations with clarity (use short paragraphs or bullet points if needed).  
+        - If examples, timestamps, or details are mentioned in the video, include them naturally in your answer.  
+        - Always stay accurate and avoid adding outside assumptions.  
 
-Transcript Summary:\n\n{st.session_state.summary}\n\nQuestion: {user_question}""")
-        answer = resp.text
-        st.session_state.chat.append({"role": "assistant", "content": answer})
-        st.markdown(f"**Answer:** {answer}")
-
-
-
-
-
-
-
-
-
-
+        Transcript Summary:\n\n{st.session_state.summary}\n\nQuestion: {user_question}
+        """)
+        answer_en = resp.text
+        answer = gemini_translate(answer_en, target_lang)
+        st.session_state.chat.append({"role": "assistant", "content": answer })
+        st.markdown(f"**{ui_translate('Answer:', target_lang)}** {answer}")
