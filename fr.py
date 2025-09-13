@@ -41,7 +41,7 @@ language_options = {
     "Chinese": "zh-CN"
 }
 
-lang_choice = st.selectbox(GoogleTranslator(source='en', target='en').translate("Choose Language:"), list(language_options.keys()))
+lang_choice = st.sidebar.selectbox(GoogleTranslator(source='en', target='en').translate("Choose Language:"), list(language_options.keys()))
 target_lang = language_options[lang_choice]
 
 def safe_generate(prompt,retries=3):
@@ -132,13 +132,8 @@ if st.button(ui_translate("Load Transcript", target_lang)):
 
 
 st.write(ui_translate("What would you like to do next?", target_lang))
-col1, col2 = st.columns([1,1], gap="small") 
-with col1:
-    summarize_clicked = st.button("📝 " + ui_translate("Summarize the video", target_lang), key="summarize_btn" , type = "secondary")
-with col2:
-    transcript_clicked = st.button(ui_translate("View Entire Transcript(Original)", target_lang), key="full_transcript_btn", type = "tertiary")
 
-if summarize_clicked:
+if st.button("📝 " + ui_translate("Summarize the video", target_lang)): 
     if not st.session_state.summary:
         st.error(ui_translate("Please load transcript first!", target_lang))
     else:
@@ -152,11 +147,12 @@ if summarize_clicked:
             st.session_state.summary = final_summary
             st.write(final_summary)
 
-if transcript_clicked:
+if st.sidebar.button(ui_translate("View Entire Transcript", target_lang)):
     if not st.session_state.transcript:
         st.error(ui_translate("Please load transcript first!", target_lang))
     else:
         with st.spinner(ui_translate("Getting full transcript...", target_lang)):
+            st.subheader(ui_translate("Here's your Complete Transcript in Original Language:", target_lang))
             st.write(st.session_state.transcript)
 
 
