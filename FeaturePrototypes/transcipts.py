@@ -3,7 +3,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 
 
 ytt_api = YouTubeTranscriptApi()
-video_id =   "GYt5093aCQM"  
+video_id =  "GYt5093aCQM"  
 
 # retrieve the available transcripts
 transcript_list = ytt_api.list(video_id)
@@ -26,8 +26,9 @@ for transcript in transcript_list:
 
     # fetch the actual transcript data
     # print(transcript.fetch())
-    # Format of this is : FetchedTranscriptSnippet(text='అంటుండు.', s     start=201.76, duration=2.32) this is not array
-    # From this lets just take the text part
+    # The transcript.fetch() method returns a list of transcript snippet objects (such as FetchedTranscriptSnippet). Each object contains attributes like text, start, and duration. 
+    # Format of this is : FetchedTranscriptSnippet(text='అంటుండు.', s     start=201.76, duration=2.32) this is not array ,but list of objects with attributes
+    # So from this lets just take the text part
       
     for item in transcript.fetch():
         text += item.text 
