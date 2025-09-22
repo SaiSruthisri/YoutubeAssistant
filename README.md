@@ -1,31 +1,49 @@
-# YouTube Assistant
+#  YouTube Assistant  
 
-A Streamlit web app to extract, summarize, translate, and interact with YouTube video transcripts using Gemini AI. (Text-to-Voice feature coming soon!)
+A **Streamlit web app** to extract, summarize, translate, and interact with YouTube video transcripts using **Gemini AI**.  
+*(Text-to-Voice feature coming soon!)*  
 
-## Features
 
-- Extract YouTube Transcripts:
-     - Enter a YouTube URL and fetch the transcript
-     - The transcript is fetched in the first available language (usually English).
-     - For long transcripts, the app automatically chunks and summarizes in parts.
-- Summarize Transcript: Automatically summarizes the transcript using Gemini AI, with bullet-points.
-- View Transcript: View the complete transcript in its original language from the sidebar.
-- Ask Questions: Ask questions about the video content and get AI-powered answers based on the transcipt.
-- Interactive UI: Added interactive spinners , sidebars , button features via simple Streamlit interface.
-- Choose your language:         
-     - Translate summaries and answers to your chosen language using Gemini for high quality.     
-     - UI elements are translated instantly using deep-translator.
-- Text to Voice: _Coming soon !_
 
-## Tech Stack
+## Features  
+
+- **Extract YouTube Transcripts**  
+  - Enter any YouTube URL and fetch the transcript.  
+  - Automatically grabs in the first available language.  
+  - Handles long transcripts by chunking & summarizing in parts.  
+
+- **Summarize Transcript**  
+  - Get concise, **bullet-point summaries** powered by Gemini AI.  
+
+- **View Transcript**  
+  - Access the complete transcript in its original language directly from the sidebar.  
+
+- **Ask Questions**  
+  - Interactively ask about the video content.  
+  - Receive **AI-powered answers** grounded in the transcript.  
+
+- **Multilingual Support**  
+  - Translate summaries and answers into **20+ languages** via Gemini.  
+  - UI elements (buttons, headings, prompts) are instantly translated with `deep-translator`.  
+
+- **Interactive UI**  
+  - Clean Streamlit interface with **spinners, sidebars, and buttons** for smooth interaction.  
+
+- **Text-to-Voice (Coming Soon)**  
+  - Convert transcript summaries and answers into speech.  
+
+
+
+##  Tech Stack  
 
 - ``Streamlit``: For building the interactive web frontend.
 - ``youtube-transcript-api``: To fetch YouTube video transcripts programmatically.
 - ``google-generativeai (Gemini 2.0 Flash-Lite model)``: For summarization, translation, and question answering on video content. Model, rate, and token limits are configurable in `config.py`.
 - ``deep-translator``: For translating UI elements content into multiple languages.
-- ``python-dotenv``: For secure management of API keys and environment variables.
+- ``python-dotenv``: Managing API keys securely.
 
-## Setup
+
+##  Setup  
 
 1. **Clone the repository:**
    ```bash
@@ -51,7 +69,7 @@ A Streamlit web app to extract, summarize, translate, and interact with YouTube 
    ```
    - After running, open your browser and go to [http://localhost:8501](http://localhost:8501) to use the app live.
 
-## Usage
+##  Getting Started
 
 1. **Choose Language:**  
    Select your preferred language for the UI and output.
@@ -80,12 +98,13 @@ A Streamlit web app to extract, summarize, translate, and interact with YouTube 
 
 > **Note:** Since this is a Streamlit app, always use the buttons in the intended order (e.g., Load Transcript → Summarize → Ask) to avoid losing data on the screen. Switching between buttons or reloading may reset the app state and clear your previous results or questions.
 
-## Supported Languages (for translation)
+
+##  Supported Languages (for translation)
 
 - English, Hindi, French, Spanish, German, Telugu, Kannada, Tamil, Russian, Portuguese, Italian, Dutch, Arabic, Korean, Turkish, Vietnamese, Filipino, Japanese, Chinese
 
 
-## Special Thanks & Documentation
+##  Special Thanks & Documentation  
 
 This project was made possible thanks to the following open-source libraries, documentation, and best practices:
 
@@ -95,9 +114,9 @@ This project was made possible thanks to the following open-source libraries, do
 - [google-generativeai](https://pypi.org/project/google-generativeai/)
 - [python-dotenv](https://pypi.org/project/python-dotenv/)
 - **Gemini API Rate Limiting:** Read about Gemini model rate limits and quotas [here](https://ai.google.dev/gemini-api/docs/rate-limits)
-- **Retry Strategies:** Best practices for handling API retries and backoff are based on [Link](https://cloud.google.com/storage/docs/retry-strategy#python)
+- **Retry Strategies:** Best practices for handling API retries and backoff are explained [here](https://cloud.google.com/storage/docs/retry-strategy#python)
 
-## Working flow
+##  Working flow
 
 
 https://github.com/user-attachments/assets/ee644579-c555-4746-87f5-17a8467a0477
