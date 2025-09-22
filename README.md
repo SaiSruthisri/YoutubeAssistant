@@ -69,7 +69,7 @@ A **Streamlit web app** to extract, summarize, translate, and interact with YouT
    ```
    - After running, open your browser and go to [http://localhost:8501](http://localhost:8501) to use the app live.
 
-##  Getting Started
+##  Usage
 
 1. **Choose Language:**  
    Select your preferred language for the UI and output.
