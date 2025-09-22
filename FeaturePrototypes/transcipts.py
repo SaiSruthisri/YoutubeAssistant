@@ -1,8 +1,8 @@
-# Test File get the full transcript text (from documentation)
+# Test code: Retrieve full transcripts text (from documentation)
 from youtube_transcript_api import YouTubeTranscriptApi
 
 
-ytt_api = YouTubeTranscriptApi()
+ytt_api = YouTubeTranscriptApi() 
 video_id =  "GYt5093aCQM"  
 
 # retrieve the available transcripts
@@ -32,7 +32,6 @@ for transcript in transcript_list:
       
     for item in transcript.fetch():
         text += item.text 
-
         # full_text = full_text.replace("'", "").replace('"', "")     # (removing quotes to avoid issues in prompts)
 
 print(text)

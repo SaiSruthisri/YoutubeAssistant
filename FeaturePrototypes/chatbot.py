@@ -1,4 +1,4 @@
-# Goal : To build a pure remembering LLM (history auto-stored by the SDK) and guide its behavior with system instructions
+# Test Code : To build a pure conversation remembering LLM (history auto-stored by the SDK) and guide its behavior with system instructions
 from dotenv import load_dotenv
 import os
 from google import genai
