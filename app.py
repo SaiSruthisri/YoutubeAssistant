@@ -104,9 +104,14 @@ if st.button(ui_translate("Load Transcript", target_lang)):
     else:
         try:
             with st.spinner(ui_translate("Fetching and summarizing transcript...", target_lang)):
-                
+                try:
+                    # Try English first
+                    transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+                except:
+                    # If English not available, get auto-generated (Hindi here)
+                    transcript = YouTubeTranscriptApi.get_transcript(video_id)
+                # transcript = YouTubeTranscriptApi.get_transcript(video_id)
                 full_text = ""
-                transcript = YouTubeTranscriptApi.get_transcript(video_id)
                 for item in transcript:
                     full_text += item["text"] + " "
                 st.session_state.transcript = full_text      
