@@ -6,8 +6,10 @@ import streamlit as st
 import google.genai as genai
 import os, re, time, random
 
-load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
+# load_dotenv()
+# api_key = os.getenv("GEMINI_API_KEY") //for local use the .env 
+# For deployed version use Streamlit secrets
+api_key = st.secrets["GEMINI_API_KEY"]
 client = genai.Client(api_key=api_key)
 
 
