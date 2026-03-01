@@ -104,12 +104,11 @@ if st.button(ui_translate("Load Transcript", target_lang)):
     else:
         try:
             with st.spinner(ui_translate("Fetching and summarizing transcript...", target_lang)):
-                ytt_api = YouTubeTranscriptApi()
-                transcript_list = ytt_api.list(video_id)
+                
                 full_text = ""
-                first_lang_transcript = next(iter(transcript_list))
-                for item in first_lang_transcript.fetch():
-                    full_text += item.text  
+                transcript = YouTubeTranscriptApi.get_transcript(video_id)
+                for item in transcript:
+                    full_text += item["text"] + " "
                 st.session_state.transcript = full_text      
 
                 chunks = chunk_text(full_text, max_tokens=TPM//RPM)
